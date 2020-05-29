@@ -9,7 +9,8 @@ var io = require('socket.io')
 
 app.use(express.static(__dirname+'/build'))
 app.get('/', function(req, res){
-    res.sendFile(__dirname+'/build/index.html')
+    //res.sendFile(__dirname+'/build/index.html')
+    res.send("hello")
 })
 
 const port = process.env.port || 4000;
