@@ -103,7 +103,7 @@ class App extends Component {
       payload
     })
   }
-/*
+
   mediaConstraint = {
     audio: true,
     video: {
@@ -111,21 +111,21 @@ class App extends Component {
       height: "240",
     }
   }
-  */
-
+  
+/*
   basicConstraint = {
     audio: true,
     video: true
   }
-
+*/
   /* ACTION METHODS FROM THE BUTTONS ON SCREEN */
 
   createOffer = () => {
     console.log('Offer')
-    navigator.mediaDevices.getUserMedia(this.basicConstraint)
+    navigator.mediaDevices.getUserMedia(this.mediaConstraint)
       .then((stream) => {
         this.localVideoref.current.srcObject = stream;
-        this.connectedPeers.forEach((peer, id) => stream.getTracks().forEach(track =>peer.addTrack(track, stream)));
+        this.connectedPeers.forEach((peer, id) => stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())}));
       })
       .then(()=>{
         for( const [peerID, peer] of this.connectedPeers.entries()) {
@@ -148,11 +148,11 @@ class App extends Component {
     console.log('Answer')
     const peer = this.connectedPeers.get(id);
     
-    navigator.mediaDevices.getUserMedia(this.basicConstraint)
+    navigator.mediaDevices.getUserMedia(this.mediaConstraint)
     .then((stream) => {
       
       this.localVideoref.current.srcObject = stream;
-      stream.getTracks().forEach(track =>peer.addTrack(track, stream))
+      stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())})
     })
     .then(()=>peer.createAnswer())
     .then(sdp => {
