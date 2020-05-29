@@ -152,7 +152,7 @@ class App extends Component {
     .then((stream) => {
       
       this.localVideoref.current.srcObject = stream;
-      stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())})
+      stream.getTracks().forEach(track =>peer.addTrack(track, stream))
     })
     .then(()=>peer.createAnswer())
     .then(sdp => {
