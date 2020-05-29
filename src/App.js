@@ -109,6 +109,7 @@ class App extends Component {
     video: {
       width: "320",
       height: "240",
+      resizeMode: "crop-and-scale"
     }
   }
   
