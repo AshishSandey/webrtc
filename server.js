@@ -13,7 +13,7 @@ app.get('/', function(req, res){
     res.send("hello")
 })
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const host = '0.0.0.0';
 const server = app.listen(port, host, function(){
     console.log(`server listening to port : ${port}`)
