@@ -24,7 +24,7 @@ class App extends Component {
   componentDidMount() {
 
     this.socket = io(
-      '/webrtcPeer',
+      'http://localhost:4000/webrtcPeer',
       {
         path: '/webrtc',
         query: {}
@@ -109,9 +109,43 @@ class App extends Component {
     video: {
       width: "320",
       height: "240",
-      resizeMode: "none"
     }
   }
+
+  preferCodec(codecs, mimeType) {
+    let otherCodecs = [];
+    let sortedCodecs = [];
+    let count = codecs.length;
+  
+    codecs.forEach(codec => {
+      if (codec.mimeType === mimeType) {
+        sortedCodecs.push(codec);
+      } else {
+        otherCodecs.push(codec);
+      }
+    });
+  
+    return sortedCodecs.concat(otherCodecs);
+  }
+
+  changeVideoCodec(peer, mimeType) {
+    const transceivers = peer.getTransceivers();
+  
+    transceivers.forEach(transceiver => {
+      const kind = transceiver.sender.track.kind;
+      let sendCodecs = RTCRtpSender.getCapabilities(kind).codecs;
+      let recvCodecs = RTCRtpReceiver.getCapabilities(kind).codecs;
+  
+      if (kind === "video") {
+        sendCodecs = this.preferCodec(mimeType);
+        recvCodecs = this.preferCodec(mimeType);
+        transceiver.setCodecPreferences([...sendCodecs, ...recvCodecs]);
+      }
+    });
+  
+  }
+
+
   
 /*
   basicConstraint = {
@@ -123,10 +157,12 @@ class App extends Component {
 
   createOffer = () => {
     console.log('Offer')
+
     navigator.mediaDevices.getUserMedia(this.mediaConstraint)
       .then((stream) => {
         this.localVideoref.current.srcObject = stream;
-        this.connectedPeers.forEach((peer, id) => stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())}));
+        this.connectedPeers.forEach(
+          (peer, id) => {this.changeVideoCodec(peer, 'video/H264'); stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())})});
       })
       .then(()=>{
         for( const [peerID, peer] of this.connectedPeers.entries()) {
@@ -162,6 +198,7 @@ class App extends Component {
     })
     .then(()=>this.sendToPeer(id, 'signal', peer.localDescription))
     .catch(e => console.log('getUserMedia Error: ', e))
+    
   }
 
   render() {
