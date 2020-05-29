@@ -2,16 +2,26 @@
   "name": "webrtc",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "10.15.2"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "uws": "^10.148.1",
+    "webrtc-adapter": "^7.6.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "_start": "react-scripts start",
+    "start": "node server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
