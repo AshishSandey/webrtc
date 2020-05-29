@@ -16,7 +16,7 @@ app.get('/', function(req, res){
 const port = process.env.port || 4000;
 const host = '0.0.0.0';
 const server = app.listen(port, host, function(){
-    console.log('server listening to port : 4000')
+    console.log(`server listening to port : ${port}`)
 })
 
 io.listen(server);
