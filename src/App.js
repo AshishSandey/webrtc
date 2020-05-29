@@ -130,7 +130,7 @@ class App extends Component {
       .then(()=>{
         for( const [peerID, peer] of this.connectedPeers.entries()) {
           peer
-            .createOffer({ offerToReceiveVideo: 1 })
+            .createOffer()
             .then(sdp => {
               // console.log(JSON.stringify(sdp))
               // set offer sdp as local description
@@ -150,10 +150,11 @@ class App extends Component {
     
     navigator.mediaDevices.getUserMedia(this.basicConstraint)
     .then((stream) => {
+      
       this.localVideoref.current.srcObject = stream;
       stream.getTracks().forEach(track =>{peer.addTrack(track, stream); console.log(track.getSettings())})
     })
-    .then(()=>peer.createAnswer({ offerToReceiveVideo: 1 }))
+    .then(()=>peer.createAnswer())
     .then(sdp => {
       // set answer sdp as local description
       return peer.setLocalDescription(sdp)
